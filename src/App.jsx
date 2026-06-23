@@ -126,11 +126,16 @@ function Hero() {
             className="hero-photo hero-photo-main"
             src={`${assetBase}assets/img/gallery/kichi-kids-web.jpg`}
             alt="Decoracion infantil con arco de globos pastel y mesa tematica"
+            width="1200"
+            height="1600"
+            fetchPriority="high"
           />
           <img
             className="hero-photo hero-photo-overlap"
             src={`${assetBase}assets/img/gallery/sirena-zoe-01-web.jpg`}
             alt="Decoracion de sirena con globos y luces"
+            width="1600"
+            height="1200"
           />
           <div className="detail-note">
             <span>Hecho con detalle</span>
@@ -188,6 +193,7 @@ function Catalog() {
                 className={active === category ? "is-active" : ""}
                 key={category}
                 type="button"
+                aria-pressed={active === category}
                 onClick={() => setActive(category)}
               >
                 {category}
@@ -199,7 +205,14 @@ function Catalog() {
         <div className="catalog-mosaic" data-reveal="right">
           {visibleGallery.map((item, index) => (
             <article className={index === 0 ? "work-card is-large" : "work-card"} key={item.title}>
-              <img src={item.image} alt={item.title} />
+              <img
+                src={item.image}
+                alt={item.title}
+                loading={index === 0 ? "eager" : "lazy"}
+                decoding="async"
+                width="1600"
+                height="1200"
+              />
               <div>
                 <span>{item.category}</span>
                 <h3>{item.title}</h3>
@@ -231,11 +244,17 @@ function Services() {
               className={`service-item specialty-${specialtyStyles[index % specialtyStyles.length]}`}
               key={service.title}
               data-reveal="up"
-              style={{
-                "--delay": `${index * 70}ms`,
-                "--specialty-image": `url(${service.image})`
-              }}
+              style={{ "--delay": `${index * 70}ms` }}
             >
+              <img
+                className="service-item-media"
+                src={service.image}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                width="1600"
+                height="1200"
+              />
               <span>{String(index + 1).padStart(2, "0")}</span>
               <h3>{service.title}</h3>
               <p>{service.text}</p>

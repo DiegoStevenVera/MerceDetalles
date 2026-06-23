@@ -21,6 +21,7 @@
   --header-h: 74px;
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --focus-ring: 0 0 0 4px rgba(233, 133, 167, 0.28);
   font-family:
     "Aptos",
     "Segoe UI",
@@ -33,11 +34,13 @@
 }
 
 html {
+  overflow-x: clip;
   scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
+  overflow-x: clip;
   color: var(--ink);
   background:
     radial-gradient(circle at 10% 28%, rgba(233, 133, 167, 0.2), transparent 24rem),
@@ -50,6 +53,14 @@ a {
   text-decoration: none;
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--rose-strong);
+  outline-offset: 3px;
+  box-shadow: var(--focus-ring);
+}
+
 img {
   display: block;
   max-width: 100%;
@@ -58,6 +69,12 @@ img {
 button,
 input {
   font: inherit;
+}
+
+button,
+a,
+label {
+  touch-action: manipulation;
 }
 
 code {
@@ -157,7 +174,6 @@ code {
 .nav-links a:hover,
 .nav-links a:focus-visible {
   background: var(--surface-rose);
-  outline: none;
 }
 
 .nav-links .nav-quote {
@@ -301,7 +317,8 @@ p {
   transition:
     transform 160ms var(--ease-out),
     box-shadow 180ms var(--ease-out),
-    background-color 180ms var(--ease-out);
+    background-color 180ms var(--ease-out),
+    border-color 180ms var(--ease-out);
 }
 
 .button-primary {
@@ -312,7 +329,6 @@ p {
 
 .button-primary:hover,
 .button-primary:focus-visible {
-  outline: none;
   box-shadow: 0 14px 30px rgba(61, 44, 53, 0.22);
 }
 
@@ -463,7 +479,6 @@ p {
   border-color: transparent;
   background: var(--rose);
   color: white;
-  outline: none;
 }
 
 .catalog-mosaic {
@@ -479,6 +494,8 @@ p {
   border-radius: var(--radius-card);
   background: var(--surface);
   box-shadow: 0 10px 30px rgba(117, 83, 97, 0.1);
+  contain: paint;
+  transform: translateZ(0);
 }
 
 .work-card.is-large {
@@ -490,6 +507,10 @@ p {
   height: 100%;
   min-height: 100%;
   object-fit: cover;
+  transform: scale(1.01);
+  transition:
+    transform 520ms var(--ease-out),
+    filter 520ms var(--ease-out);
 }
 
 .work-card div {
@@ -501,11 +522,19 @@ p {
   background: rgba(255, 255, 255, 0.9);
   padding: 10px;
   transform: translateY(0);
-  transition: transform 220ms var(--ease-out);
+  transition:
+    transform 220ms var(--ease-out),
+    background-color 220ms var(--ease-out);
+  backdrop-filter: blur(10px);
 }
 
 .work-card:hover div {
   transform: translateY(-3px);
+}
+
+.work-card:hover img {
+  filter: saturate(1.06) contrast(1.02);
+  transform: scale(1.055);
 }
 
 .work-card span,
@@ -565,16 +594,28 @@ p {
   min-height: 168px;
   border: 1px solid rgba(255, 255, 255, 0.46);
   border-radius: var(--radius-card);
-  background:
-    linear-gradient(180deg, rgba(61, 44, 53, 0.02), rgba(61, 44, 53, 0.48)),
-    var(--specialty-image) center / cover;
-  padding: 20px;
+  background: linear-gradient(180deg, rgba(255, 240, 245, 0.92), rgba(112, 45, 76, 0.86));
+  padding: 22px;
   box-shadow: 0 18px 44px rgba(117, 83, 97, 0.14);
   color: white;
+  contain: paint;
   transition:
     transform 240ms var(--ease-out),
     box-shadow 240ms var(--ease-out),
     filter 240ms var(--ease-out);
+}
+
+.service-item-media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.02);
+  transition:
+    transform 700ms var(--ease-out),
+    filter 700ms var(--ease-out);
 }
 
 .service-item::before,
@@ -615,6 +656,11 @@ p {
   box-shadow: 0 22px 54px rgba(117, 83, 97, 0.2);
 }
 
+.service-item:hover .service-item-media {
+  filter: saturate(1.08) contrast(1.03);
+  transform: scale(1.075);
+}
+
 .service-item span {
   position: absolute;
   top: 18px;
@@ -631,6 +677,7 @@ p {
 .service-item h3,
 .service-item p {
   position: relative;
+  z-index: 1;
   color: white;
   text-shadow: 0 1px 16px rgba(61, 44, 53, 0.22);
 }
@@ -646,7 +693,7 @@ p {
 }
 
 .service-item:not(:nth-child(1)) h3 {
-  font-size: clamp(1.08rem, 1.45vw, 1.42rem);
+  font-size: clamp(1.02rem, 1.25vw, 1.28rem);
   line-height: 1.08;
 }
 
@@ -695,16 +742,28 @@ p {
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
   background: rgba(255, 255, 255, 0.83);
+  backdrop-filter: blur(12px);
 }
 
 .package-card {
   position: relative;
   padding: 20px;
+  box-shadow: 0 14px 38px rgba(117, 83, 97, 0.08);
+  transition:
+    transform 220ms var(--ease-out),
+    box-shadow 220ms var(--ease-out),
+    border-color 220ms var(--ease-out);
 }
 
 .package-card.featured {
   border-color: rgba(215, 167, 101, 0.58);
   background: linear-gradient(180deg, #fff, #fff7e8);
+}
+
+.package-card:hover {
+  border-color: rgba(233, 133, 167, 0.36);
+  box-shadow: 0 20px 52px rgba(117, 83, 97, 0.13);
+  transform: translateY(-3px);
 }
 
 .package-badge {
@@ -778,6 +837,25 @@ p {
   background: rgba(255, 255, 255, 0.82);
   padding: 10px;
   cursor: pointer;
+  transition:
+    transform 160ms var(--ease-out),
+    background-color 180ms var(--ease-out),
+    border-color 180ms var(--ease-out);
+}
+
+.addon:hover {
+  border-color: rgba(233, 133, 167, 0.38);
+  background: rgba(255, 240, 245, 0.72);
+}
+
+.addon:active {
+  transform: scale(0.985);
+}
+
+.addon:has(input:checked) {
+  border-color: rgba(207, 95, 135, 0.52);
+  background: linear-gradient(180deg, #fff, #fff0f5);
+  box-shadow: inset 0 0 0 1px rgba(207, 95, 135, 0.1);
 }
 
 .addon input {
